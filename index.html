@@ -1,31 +1,628 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>户户卤菜单</title>
-  <style>
-    /* 简单样式：图片自适应宽度、居中显示 */
-    body {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    img {
-      max-width: 100%;
-      display: block;
-      margin: 15px auto;
-      border-radius: 8px; /* 可选：给图片加圆角 */
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KUN FU KITCHEN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#C22026', // 主红（匹配logo）
+                        secondary: '#FFFFFF',
+                        accent: '#D4AF37',   // 金色（匹配logo）
+                        dark: '#2C2C2C',
+                    },
+                    fontFamily: {
+                        heiti: ['SimHei', '黑体', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            }
+            .scroll-smooth {
+                scroll-behavior: smooth;
+            }
+            .chinese-small {
+                font-size: 0.75rem;
+                color: #666;
+            }
+            .nav-scroll {
+                scrollbar-width: none; /* 隐藏滚动条 */
+            }
+            .nav-scroll::-webkit-scrollbar {
+                display: none;
+            }
+            .dish-card-img {
+                aspect-ratio: 4/3;
+                object-fit: cover;
+            }
+        }
+    </style>
 </head>
-<body>
-  <h1>户户卤的电子菜单</h1>
-  <!-- 替换为自己的图片名称 -->
-  <img src="menu-01.jpg" alt="菜品区1">
-  <img src="menu-02.gif" alt="菜品区2">
-  <img src="menu-03.jpg" alt="饮品区">
-  <img src="menu-04.jpg" alt="饮品区">
-  <!-- 可继续添加更多图片 -->
+<body class="font-heiti bg-secondary text-dark scroll-smooth">
+    <!-- 固定顶部导航 -->
+    <header class="fixed top-0 left-0 right-0 bg-primary text-secondary z-50 shadow-lg">
+        <!-- Logo区域 -->
+        <div class="container mx-auto px-4 py-2 flex justify-between items-center">
+            <!-- 餐厅Logo -->
+            <div class="flex items-center space-x-2">
+                <div class="w-10 h-10 rounded-full bg-accent flex items-center justify-center">
+                    <span class="text-primary font-bold text-lg">龙</span>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold">KUNG FU KITCHEN</h1>
+                    <p class="text-xs text-accent">户户卤</p>
+                </div>
+            </div>
+            <!-- 移动端导航触发按钮（仅小屏幕显示） -->
+            <button id="navMobileToggle" class="md:hidden text-xl">
+                <i class="fa fa-bars"></i>
+            </button>
+        </div>
+        
+        <!-- 导航菜单 - 横向滚动（大屏）/ 下拉（小屏） -->
+        <nav id="mainNav" class="bg-primary/95 backdrop-blur-sm md:block hidden">
+            <div class="container mx-auto px-4">
+                <div class="flex space-x-2 py-2 nav-scroll overflow-x-auto">
+                    <a href="#appetiser" class="whitespace-nowrap px-3 py-2 rounded-md hover:bg-accent/20 transition-colors text-center">
+                        <i class="fa fa-star-o mr-1"></i>Appetiser
+                    </a>
+                    <a href="#pork" class="whitespace-nowrap px-3 py-2 rounded-md hover:bg-accent/20 transition-colors text-center">
+                        <i class="fa fa-cutlery mr-1"></i>Pork Wednesday
+                    </a>
+                    <a href="#beef" class="whitespace-nowrap px-3 py-2 rounded-md hover:bg-accent/20 transition-colors text-center">
+                        <i class="fa fa-cutlery mr-1"></i>Beef (Thu/Sat)
+                    </a>
+                    <a href="#chicken" class="whitespace-nowrap px-3 py-2 rounded-md hover:bg-accent/20 transition-colors text-center">
+                        <i class="fa fa-cutlery mr-1"></i>Chicken Friday
+                    </a>
+                    <a href="#side" class="whitespace-nowrap px-3 py-2 rounded-md hover:bg-accent/20 transition-colors text-center">
+                        <i class="fa fa-lemon-o mr-1"></i>Side
+                    </a>
+                    <a href="#sauce" class="whitespace-nowrap px-3 py-2 rounded-md hover:bg-accent/20 transition-colors text-center">
+                        <i class="fa fa-tint mr-1"></i>Sauce
+                    </a>
+                    <a href="#drink" class="whitespace-nowrap px-3 py-2 rounded-md hover:bg-accent/20 transition-colors text-center">
+                        <i class="fa fa-glass mr-1"></i>Drink
+                    </a>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- 移动端下拉导航 -->
+        <nav id="mobileNavMenu" class="hidden bg-primary/95 backdrop-blur-sm md:hidden">
+            <ul class="container mx-auto px-4 py-2 space-y-1">
+                <li><a href="#appetiser" class="block py-2 px-3 rounded-md hover:bg-accent/20 transition-colors">
+                    <i class="fa fa-star-o mr-2"></i>Appetiser
+                </a></li>
+                <li><a href="#pork" class="block py-2 px-3 rounded-md hover:bg-accent/20 transition-colors">
+                    <i class="fa fa-cutlery mr-2"></i>Pork Wednesday
+                </a></li>
+                <li><a href="#beef" class="block py-2 px-3 rounded-md hover:bg-accent/20 transition-colors">
+                    <i class="fa fa-cutlery mr-2"></i>Beef (Thu/Sat)
+                </a></li>
+                <li><a href="#chicken" class="block py-2 px-3 rounded-md hover:bg-accent/20 transition-colors">
+                    <i class="fa fa-cutlery mr-2"></i>Chicken Friday
+                </a></li>
+                <li><a href="#side" class="block py-2 px-3 rounded-md hover:bg-accent/20 transition-colors">
+                    <i class="fa fa-lemon-o mr-2"></i>Side
+                </a></li>
+                <li><a href="#sauce" class="block py-2 px-3 rounded-md hover:bg-accent/20 transition-colors">
+                    <i class="fa fa-tint mr-2"></i>Sauce & Seasonings
+                </a></li>
+                <li><a href="#drink" class="block py-2 px-3 rounded-md hover:bg-accent/20 transition-colors">
+                    <i class="fa fa-glass mr-2"></i>Drink
+                </a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- 首页部分 -->
+    <section class="pt-24 md:pt-28 pb-8 bg-primary text-secondary">
+        <div class="container mx-auto px-4">
+            <!-- 店铺信息 -->
+            <div class="text-center mb-6">
+                <h2 class="text-3xl font-bold mb-2 text-shadow">KUNG FU KITCHEN</h2>
+                <p class="mb-1"><i class="fa fa-phone mr-2"></i> +44 123 456 7890</p>
+                <p class="mb-4"><i class="fa fa-map-marker mr-2"></i> 123 Food Street, London, SW1A 1AA</p>
+                <a href="https://maps.google.com" class="inline-block bg-accent text-dark px-4 py-2 rounded-md hover:bg-accent/80 transition-colors">
+                    Get Directions <i class="fa fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+
+            <!-- 特色菜品轮播 -->
+            <div class="relative overflow-hidden rounded-lg h-64 md:h-80">
+                <div id="carousel" class="flex transition-transform duration-500 ease-in-out">
+                    <div class="min-w-full h-64 md:h-80 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1556740755-2fe15a468e8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')">
+                        <div class="h-full w-full bg-black/50 flex items-center justify-center">
+                            <div class="text-center p-4">
+                                <h3 class="text-2xl font-bold mb-1">Braised Pork in Soya Sauce</h3>
+                                <p class="chinese-small">红烧肉</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="min-w-full h-64 md:h-80 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1563379926898-05f4575a45d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')">
+                        <div class="h-full w-full bg-black/50 flex items-center justify-center">
+                            <div class="text-center p-4">
+                                <h3 class="text-2xl font-bold mb-1">Beef Curry</h3>
+                                <p class="chinese-small">咖喱牛</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="min-w-full h-64 md:h-80 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')">
+                        <div class="h-full w-full bg-black/50 flex items-center justify-center">
+                            <div class="text-center p-4">
+                                <h3 class="text-2xl font-bold mb-1">Teriyaki Chicken</h3>
+                                <p class="chinese-small">照烧鸡</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 轮播控制 -->
+                <button id="prevBtn" class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/30 text-white p-2 rounded-full hover:bg-accent/80 transition-colors">
+                    <i class="fa fa-chevron-left"></i>
+                </button>
+                <button id="nextBtn" class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/30 text-white p-2 rounded-full hover:bg-accent/80 transition-colors">
+                    <i class="fa fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 菜单内容 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 头盘 -->
+        <section id="appetiser" class="mb-16 scroll-mt-28">
+            <h2 class="text-2xl font-bold mb-6 pb-2 border-b-2 border-primary">
+                <i class="fa fa-star-o mr-2 text-accent"></i>
+                Appetiser <span class="chinese-small ml-2">头盘</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 菜品1 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer" onclick="openDishDetail(this, 'https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80')">
+                    <img src="https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Mini Veg Spring Rolls" class="dish-card-img w-full">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-bold">Mini Veg Spring Rolls (6) with Dip</h3>
+                            <span class="text-primary font-bold">£4.20</span>
+                        </div>
+                        <p class="chinese-small mb-2">蔬菜小春卷</p>
+                        <p class="text-sm text-gray-600">Crispy vegetable-filled spring rolls served with dipping sauce</p>
+                    </div>
+                </div>
+                <!-- 菜品2 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer" onclick="openDishDetail(this, 'https://images.unsplash.com/photo-1596655756666-2867eecb5e9f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80')">
+                    <img src="https://images.unsplash.com/photo-1596655756666-2867eecb5e9f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Teriyaki Chicken Skewers" class="dish-card-img w-full">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-bold">Teriyaki Chicken Skewers (4) with Dip</h3>
+                            <span class="text-primary font-bold">£5.20</span>
+                        </div>
+                        <p class="chinese-small mb-2">照烧鸡肉串</p>
+                        <p class="text-sm text-gray-600">Grilled chicken skewers coated in sweet teriyaki sauce</p>
+                    </div>
+                </div>
+                <!-- 菜品3 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer" onclick="openDishDetail(this, 'https://images.unsplash.com/photo-1604908176121-4f2416e55c28?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80')">
+                    <img src="https://images.unsplash.com/photo-1604908176121-4f2416e55c28?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Teriyaki Chicken on Ball" class="dish-card-img w-full">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-bold">Teriyaki Chicken on Ball (4) with Dip</h3>
+                            <span class="text-primary font-bold">£5.20</span>
+                        </div>
+                        <p class="chinese-small mb-2">照烧鸡丸</p>
+                        <p class="text-sm text-gray-600">Juicy chicken meatballs with teriyaki glaze</p>
+                    </div>
+                </div>
+                <!-- 菜品4 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer" onclick="openDishDetail(this, 'https://images.unsplash.com/photo-1628899336060-0a304eb92f58?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80')">
+                    <img src="https://images.unsplash.com/photo-1628899336060-0a304eb92f58?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Teriyaki Pork Balls" class="dish-card-img w-full">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-bold">Teriyaki Pork Balls (6) with Dip</h3>
+                            <span class="text-primary font-bold">£5.20</span>
+                        </div>
+                        <p class="chinese-small mb-2">照烧猪肉丸</p>
+                        <p class="text-sm text-gray-600">Savory pork meatballs with teriyaki sauce</p>
+                    </div>
+                </div>
+                <!-- 菜品5 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer" onclick="openDishDetail(this, 'https://images.unsplash.com/photo-1619740455993-9e612b034d62?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80')">
+                    <img src="https://images.unsplash.com/photo-1619740455993-9e612b034d62?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Jumbo Pork Sausage" class="dish-card-img w-full">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-bold">Jumbo Pork Sausage with Dip</h3>
+                            <span class="text-primary font-bold">£5.20</span>
+                        </div>
+                        <p class="chinese-small mb-2">大肉肠</p>
+                        <p class="text-sm text-gray-600">Large pork sausage served with dipping sauce</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 周三吃肉 -->
+        <section id="pork" class="mb-16 scroll-mt-28">
+            <h2 class="text-2xl font-bold mb-6 pb-2 border-b-2 border-primary">
+                <i class="fa fa-cutlery mr-2 text-accent"></i>
+                Pork Wednesday <span class="chinese-small ml-2">周三吃肉</span>
+            </h2>
+            
+            <h3 class="text-xl font-semibold mb-4">Pork Dish - Main <span class="chinese-small ml-2">猪肉餐</span></h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <!-- 菜品1 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer" onclick="openDishDetail(this, 'https://images.unsplash.com/photo-1556740755-2fe15a468e8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80')">
+                    <img src="https://images.unsplash.com/photo-1556740755-2fe15a468e8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Braised Pork in Soya Sauce" class="dish-card-img w-full">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold">Braised Pork in Soya Sauce</h4>
+                            <span class="text-primary font-bold">£12.80</span>
+                        </div>
+                        <p class="chinese-small mb-2">红烧肉</p>
+                        <p class="text-sm text-gray-600">Slow-cooked pork belly in soy sauce and spices</p>
+                    </div>
+                </div>
+                <!-- 菜品2 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer" onclick="openDishDetail(this, 'https://images.unsplash.com/photo-1603360946369-dc9bb6258143?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80')">
+                    <img src="https://images.unsplash.com/photo-1603360946369-dc9bb6258143?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Sliced Pork Belly with Chef's Sauce" class="dish-card-img w-full">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold">Sliced Pork Belly with Chef's Sauce</h4>
+                            <span class="text-primary font-bold">£12.80</span>
+                        </div>
+                        <p class="chinese-small mb-2">蒜泥白肉</p>
+                        <p class="text-sm text-gray-600">Sliced pork belly with special chef's sauce</p>
+                    </div>
+                </div>
+                <!-- 菜品3 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer" onclick="openDishDetail(this, 'https://images.unsplash.com/photo-1598515781161-8b2c01301861?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80')">
+                    <img src="https://images.unsplash.com/photo-1598515781161-8b2c01301861?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Teriyaki Pork Steak" class="dish-card-img w-full">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold">Teriyaki Pork Steak</h4>
+                            <span class="text-primary font-bold">£12.80</span>
+                        </div>
+                        <p class="chinese-small mb-2">照烧猪排</p>
+                        <p class="text-sm text-gray-600">Grilled pork steak with teriyaki sauce</p>
+                    </div>
+                </div>
+                <!-- 菜品4 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer" onclick="openDishDetail(this, 'https://images.unsplash.com/photo-1607013251521-84137e725775?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80')">
+                    <img src="https://images.unsplash.com/photo-1607013251521-84137e725775?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Pork Mo (Chinese Burger)" class="dish-card-img w-full">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold">Pork Mo (2) (Chinese Burger)</h4>
+                            <span class="text-primary font-bold">£12.80</span>
+                        </div>
+                        <p class="chinese-small mb-2">卤肉馍</p>
+                        <p class="text-sm text-gray-600">Two Chinese-style burgers with braised pork filling</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="text-xl font-semibold mb-4">Rice Dish <span class="chinese-small ml-2">炒饭盖饭</span></h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <!-- 菜品1 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer" onclick="openDishDetail(this, 'https://images.unsplash.com/photo-1512058564366-18510be2db19?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80')">
+                    <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Pork Fried Rice" class="dish-card-img w-full">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold">Pork Fried Rice</h4>
+                            <span class="text-primary font-bold">£13.80</span>
+                        </div>
+                        <p class="chinese-small mb-2">猪肉炒饭</p>
+                        <p class="text-sm text-gray-600">Fried rice with pork and vegetables</p>
+                    </div>
+                </div>
+                <!-- 菜品2 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer" onclick="openDishDetail(this, 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80')">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Braised Pork Rice Bowl" class="dish-card-img w-full">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold">Braised Pork Rice Bowl</h4>
+                            <span class="text-primary font-bold">£13.80</span>
+                        </div>
+                        <p class="chinese-small mb-2">卤肉盖饭</p>
+                        <p class="text-sm text-gray-600">Steamed rice topped with braised pork</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="text-xl font-semibold mb-4">Noodle Dish <span class="chinese-small ml-2">汤面拌面</span></h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-4">
+                <!-- 菜品1 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer" onclick="openDishDetail(this, 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80')">
+                    <img src="https://images.unsplash.com/photo-1569718212165-3a8278d5f624?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Braised Pork Ramen Broth" class="dish-card-img w-full">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold">Braised Pork Ramen Broth</h4>
+                            <span class="text-primary font-bold">£13.80</span>
+                        </div>
+                        <p class="chinese-small mb-2">红烧肉面</p>
+                        <p class="text-sm text-gray-600">Ramen noodles in rich pork broth with braised pork</p>
+                    </div>
+                </div>
+                <!-- 菜品2 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer" onclick="openDishDetail(this, 'https://images.unsplash.com/photo-1576613109784-0050f9f78140?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80')">
+                    <img src="https://images.unsplash.com/photo-1576613109784-0050f9f78140?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Pork Noodle in Soyabean Sauce" class="dish-card-img w-full">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold">Pork Noodle in Soyabean Sauce</h4>
+                            <span class="text-primary font-bold">£13.80</span>
+                        </div>
+                        <p class="chinese-small mb-2">卤肉炸酱面</p>
+                        <p class="text-sm text-gray-600">Noodles tossed in soybean sauce with pork</p>
+                    </div>
+                </div>
+                <!-- 菜品3 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer" onclick="openDishDetail(this, 'https://images.unsplash.com/photo-1624953587687-daf255b6b80a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80')">
+                    <img src="https://images.unsplash.com/photo-1624953587687-daf255b6b80a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Teriyaki Pork Noodle" class="dish-card-img w-full">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold">Teriyaki Pork Noodle</h4>
+                            <span class="text-primary font-bold">£13.80</span>
+                        </div>
+                        <p class="chinese-small mb-2">猪排炸酱面</p>
+                        <p class="text-sm text-gray-600">Noodles with teriyaki pork and sauce</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-accent/10 p-3 rounded text-center mb-4">
+                <p>Change to Vermicelli for Extra £1 <span class="chinese-small ml-2">换米线</span></p>
+            </div>
+        </section>
+
+        <!-- 周四/六吃牛 (示例展示核心修改，其余分类结构相同，可按此格式扩展) -->
+        <section id="beef" class="mb-16 scroll-mt-28">
+            <h2 class="text-2xl font-bold mb-6 pb-2 border-b-2 border-primary">
+                <i class="fa fa-cutlery mr-2 text-accent"></i>
+                Beef Thursday & Saturday <span class="chinese-small ml-2">周四/六吃牛</span>
+            </h2>
+            
+            <h3 class="text-xl font-semibold mb-4">Beef Dish - Main <span class="chinese-small ml-2">牛肉餐</span></h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <!-- 菜品1 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer" onclick="openDishDetail(this, 'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80')">
+                    <img src="https://images.unsplash.com/photo-1563379926898-05f4575a45d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Beef Curry" class="dish-card-img w-full">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold">Beef Curry</h4>
+                            <span class="text-primary font-bold">£12.80</span>
+                        </div>
+                        <p class="chinese-small mb-2">咖喱牛</p>
+                        <p class="text-sm text-gray-600">Tender beef in aromatic curry sauce</p>
+                    </div>
+                </div>
+                <!-- 其余牛肉菜品按相同结构添加 -->
+            </div>
+            <!-- 米饭/面条类同猪肉部分结构 -->
+            <div class="bg-accent/10 p-3 rounded text-center mb-4">
+                <p>Change to Vermicelli for Extra £1 <span class="chinese-small ml-2">换米线</span></p>
+            </div>
+        </section>
+
+        <!-- 周五吃鸡 (结构同牛肉部分) -->
+        <section id="chicken" class="mb-16 scroll-mt-28">
+            <h2 class="text-2xl font-bold mb-6 pb-2 border-b-2 border-primary">
+                <i class="fa fa-cutlery mr-2 text-accent"></i>
+                Chicken Friday <span class="chinese-small ml-2">周五吃鸡</span>
+            </h2>
+            
+            <h3 class="text-xl font-semibold mb-4">Chicken Dish - Main <span class="chinese-small ml-2">鸡肉餐</span></h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <!-- 菜品1 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer" onclick="openDishDetail(this, 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80')">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Chicken Curry" class="dish-card-img w-full">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold">Chicken Curry</h4>
+                            <span class="text-primary font-bold">£10.80</span>
+                        </div>
+                        <p class="chinese-small mb-2">咖喱鸡</p>
+                        <p class="text-sm text-gray-600">Tender chicken in aromatic curry sauce</p>
+                    </div>
+                </div>
+                <!-- 其余鸡肉菜品按相同结构添加 -->
+            </div>
+            <div class="bg-accent/10 p-3 rounded text-center mb-4">
+                <p>Change to Vermicelli for Extra £1 <span class="chinese-small ml-2">换米线</span></p>
+            </div>
+        </section>
+
+        <!-- 配餐 (结构同上) -->
+        <section id="side" class="mb-16 scroll-mt-28">
+            <h2 class="text-2xl font-bold mb-6 pb-2 border-b-2 border-primary">
+                <i class="fa fa-lemon-o mr-2 text-accent"></i>
+                Side <span class="chinese-small ml-2">配餐</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 菜品示例 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer" onclick="openDishDetail(this, 'https://images.unsplash.com/photo-1512058564366-18510be2db19?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80')">
+                    <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Steamed Rice" class="dish-card-img w-full">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-bold">Steamed Rice</h3>
+                            <span class="text-primary font-bold">£3.20</span>
+                        </div>
+                        <p class="chinese-small mb-2">白饭</p>
+                        <p class="text-sm text-gray-600">Plain steamed white rice</p>
+                    </div>
+                </div>
+                <!-- 其余配餐菜品按相同结构添加 -->
+            </div>
+        </section>
+
+        <!-- 酱汁蘸料 (网格布局优化) -->
+        <section id="sauce" class="mb-16 scroll-mt-28">
+            <h2 class="text-2xl font-bold mb-6 pb-2 border-b-2 border-primary">
+                <i class="fa fa-tint mr-2 text-accent"></i>
+                Sauce & Seasonings <span class="chinese-small ml-2">酱汁蘸料</span>
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <!-- 酱料1 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer" onclick="openDishDetail(this, 'https://images.unsplash.com/photo-1551887196-72e32bfc7bf3?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80')">
+                    <img src="https://images.unsplash.com/photo-1551887196-72e32bfc7bf3?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Chef's Special Sauce" class="dish-card-img w-full h-32">
+                    <div class="p-3">
+                        <h3 class="font-bold text-sm">Chef's Special Sauce</h3>
+                        <p class="chinese-small">中式秘制汁</p>
+                        <p class="text-xs text-gray-600 mt-1">Special house sauce</p>
+                        <span class="text-primary font-bold text-sm mt-2 inline-block">£2.80</span>
+                    </div>
+                </div>
+                <!-- 其余酱料按相同结构添加 -->
+            </div>
+        </section>
+
+        <!-- 饮料 (网格布局优化) -->
+        <section id="drink" class="mb-8 scroll-mt-28">
+            <h2 class="text-2xl font-bold mb-6 pb-2 border-b-2 border-primary">
+                <i class="fa fa-glass mr-2 text-accent"></i>
+                Drink <span class="chinese-small ml-2">饮料</span>
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <!-- 饮料1 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer" onclick="openDishDetail(this, 'https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80')">
+                    <img src="https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Coke/Pepsi Can" class="dish-card-img w-full h-32">
+                    <div class="p-3">
+                        <h3 class="font-bold text-sm">Coke/Pepsi Can</h3>
+                        <p class="chinese-small">可乐罐</p>
+                        <p class="text-xs text-gray-600 mt-1">Carbonated soft drink</p>
+                        <span class="text-primary font-bold text-sm mt-2 inline-block">£1.80</span>
+                    </div>
+                </div>
+                <!-- 其余饮料按相同结构添加 -->
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-primary text-secondary py-8">
+        <div class="container mx-auto px-4 text-center">
+            <!-- 页脚Logo -->
+            <div class="flex justify-center items-center mb-4">
+                <div class="w-12 h-12 rounded-full bg-accent flex items-center justify-center mr-3">
+                    <span class="text-primary font-bold text-xl">龙</span>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold">KUNG FU KITCHEN</h2>
+                    <p class="text-sm text-accent">户户卤</p>
+                </div>
+            </div>
+            <p class="mb-1">123 Food Street, London, SW1A 1AA</p>
+            <p class="mb-1">+44 123 456 7890</p>
+            <p class="mb-3">Opening Hours: 11:00 - 20:00 (Mon-Sat)</p>
+            <p class="text-sm">© 2025 KUNG FU KITCHEN. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- 菜品详情模态框 (带图片) -->
+    <div id="dishModal" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center hidden">
+        <div class="bg-secondary rounded-lg w-11/12 max-w-lg max-h-[90vh] overflow-y-auto p-5 relative">
+            <button id="closeModal" class="absolute top-3 right-3 text-gray-500 hover:text-primary transition-colors">
+                <i class="fa fa-times text-xl"></i>
+            </button>
+            <div id="modalContent">
+                <!-- 内容将通过JS动态填充 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 移动端导航切换
+        const navMobileToggle = document.getElementById('navMobileToggle');
+        const mobileNavMenu = document.getElementById('mobileNavMenu');
+        
+        navMobileToggle.addEventListener('click', () => {
+            mobileNavMenu.classList.toggle('hidden');
+        });
+
+        // 导航点击后关闭移动端菜单
+        document.querySelectorAll('#mobileNavMenu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileNavMenu.classList.add('hidden');
+            });
+        });
+
+        // 轮播图功能
+        const carousel = document.getElementById('carousel');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentSlide = 0;
+        const totalSlides = carousel.children.length;
+
+        function goToSlide(index) {
+            if (index < 0) index = totalSlides - 1;
+            if (index >= totalSlides) index = 0;
+            currentSlide = index;
+            carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+
+        prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+        nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+
+        // 自动轮播
+        setInterval(() => goToSlide(currentSlide + 1), 5000);
+
+        // 菜品详情模态框 (带图片)
+        const dishModal = document.getElementById('dishModal');
+        const closeModal = document.getElementById('closeModal');
+        const modalContent = document.getElementById('modalContent');
+
+        function openDishDetail(element, imgUrl) {
+            const dishName = element.querySelector('h3, h4').textContent;
+            const chineseName = element.querySelector('.chinese-small').textContent;
+            const description = element.querySelector('.text-sm, .text-xs').textContent;
+            const price = element.querySelector('.text-primary').textContent;
+
+            // 填充模态框内容（包含图片）
+            modalContent.innerHTML = `
+                <div class="mb-4">
+                    <img src="${imgUrl}" alt="${dishName}" class="w-full h-48 object-cover rounded-lg">
+                </div>
+                <h3 class="text-xl font-bold mb-2">${dishName}</h3>
+                <p class="chinese-small mb-3">${chineseName}</p>
+                <p class="mb-4 text-gray-700">${description}</p>
+                <p class="text-primary font-bold text-lg">Price: ${price}</p>
+                <div class="mt-6 p-3 bg-primary/10 rounded-md">
+                    <p class="text-sm"><i class="fa fa-info-circle mr-2 text-primary"></i> This item is available for dine-in and takeaway</p>
+                </div>
+            `;
+
+            dishModal.classList.remove('hidden');
+            // 禁止背景滚动
+            document.body.style.overflow = 'hidden';
+        }
+
+        closeModal.addEventListener('click', () => {
+            dishModal.classList.add('hidden');
+            // 恢复背景滚动
+            document.body.style.overflow = '';
+        });
+
+        // 点击模态框外部关闭
+        dishModal.addEventListener('click', (e) => {
+            if (e.target === dishModal) {
+                dishModal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // 键盘ESC关闭模态框
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !dishModal.classList.contains('hidden')) {
+                dishModal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        });
+    </script>
 </body>
 </html>
