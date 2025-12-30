@@ -11,14 +11,21 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#C22026', // 主红（匹配logo）
+                        primary: '#C22026', // 主红
                         secondary: '#FFFFFF',
-                        accent: '#D4AF37',   // 金色（匹配logo）
+                        accent: '#D4AF37',   // 金色
                         dark: '#2C2C2C',
+                        'primary-light': '#E63946',
+                        'accent-light': '#F9F0A4',
                     },
                     fontFamily: {
                         heiti: ['SimHei', '黑体', 'sans-serif'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
                     },
+                    boxShadow: {
+                        'elegant': '0 10px 30px -5px rgba(0, 0, 0, 0.1)',
+                        'card': '0 4px 20px rgba(0, 0, 0, 0.08)',
+                    }
                 }
             }
         }
@@ -28,6 +35,9 @@
             .text-shadow {
                 text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
             }
+            .text-shadow-lg {
+                text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+            }
             .scroll-smooth {
                 scroll-behavior: smooth;
             }
@@ -36,7 +46,7 @@
                 color: #666;
             }
             .nav-scroll {
-                scrollbar-width: none; /* 隐藏滚动条 */
+                scrollbar-width: none;
             }
             .nav-scroll::-webkit-scrollbar {
                 display: none;
@@ -44,82 +54,102 @@
             .dish-card-img {
                 aspect-ratio: 4/3;
                 object-fit: cover;
+                transition: transform 0.5s ease;
+            }
+            .dish-card:hover .dish-card-img {
+                transform: scale(1.05);
+            }
+            .bg-texture {
+                background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+            }
+            .gold-gradient {
+                background: linear-gradient(135deg, #D4AF37 0%, #F9F0A4 50%, #D4AF37 100%);
+            }
+            .red-gradient {
+                background: linear-gradient(135deg, #A61C3C 0%, #C22026 50%, #E63946 100%);
             }
         }
     </style>
 </head>
-<body class="font-heiti bg-secondary text-dark scroll-smooth">
+<body class="font-sans bg-secondary text-dark scroll-smooth bg-texture">
     <!-- 固定顶部导航 -->
-    <header class="fixed top-0 left-0 right-0 bg-primary text-secondary z-50 shadow-lg">
+    <header class="fixed top-0 left-0 right-0 bg-primary/95 backdrop-blur-md text-secondary z-50 transition-all duration-300 shadow-elegant">
         <!-- Logo区域 -->
-        <div class="container mx-auto px-4 py-2 flex justify-between items-center">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <!-- 餐厅Logo -->
-            <div class="flex items-center space-x-2">
-                <div class="w-10 h-10 rounded-full bg-accent flex items-center justify-center">
-                    <span class="text-primary font-bold text-lg">卤</span>
+            <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 rounded-full gold-gradient flex items-center justify-center shadow-lg transform hover:rotate-12 transition-transform">
+                    <span class="text-primary font-bold text-xl">卤</span>
                 </div>
                 <div>
-                    <h1 class="text-lg font-bold">KUNG FU KITCHEN</h1>
-                    <p class="text-xs text-accent">户户卤</p>
+                    <h1 class="text-xl font-bold tracking-wider">KUNG FU KITCHEN</h1>
+                    <p class="text-xs text-accent font-light">户户卤</p>
                 </div>
             </div>
-            <!-- 移动端导航触发按钮（仅小屏幕显示） -->
-            <button id="navMobileToggle" class="md:hidden text-xl">
+            <!-- 移动端导航触发按钮 -->
+            <button id="navMobileToggle" class="md:hidden text-xl hover:text-accent transition-colors">
                 <i class="fa fa-bars"></i>
             </button>
         </div>
         
         <!-- 导航菜单 - 横向滚动（大屏）/ 下拉（小屏） -->
-        <nav id="mainNav" class="bg-primary/95 backdrop-blur-sm md:block hidden">
+        <nav id="mainNav" class="bg-primary/90 backdrop-blur-sm md:block hidden">
             <div class="container mx-auto px-4">
-                <div class="flex space-x-2 py-2 nav-scroll overflow-x-auto">
-                    <a href="#appetiser" class="whitespace-nowrap px-3 py-2 rounded-md hover:bg-accent/20 transition-colors text-center">
+                <div class="flex space-x-1 py-3 nav-scroll overflow-x-auto">
+                    <a href="#appetiser" class="whitespace-nowrap px-4 py-2 rounded-md hover:bg-accent/20 transition-all text-center relative group">
                         <i class="fa fa-star-o mr-1"></i>Appetiser
+                        <span class="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-accent transition-all duration-300 group-hover:w-full"></span>
                     </a>
-                    <a href="#pork" class="whitespace-nowrap px-3 py-2 rounded-md hover:bg-accent/20 transition-colors text-center">
+                    <a href="#pork" class="whitespace-nowrap px-4 py-2 rounded-md hover:bg-accent/20 transition-all text-center relative group">
                         <i class="fa fa-cutlery mr-1"></i>Pork Wednesday
+                        <span class="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-accent transition-all duration-300 group-hover:w-full"></span>
                     </a>
-                    <a href="#beef" class="whitespace-nowrap px-3 py-2 rounded-md hover:bg-accent/20 transition-colors text-center">
+                    <a href="#beef" class="whitespace-nowrap px-4 py-2 rounded-md hover:bg-accent/20 transition-all text-center relative group">
                         <i class="fa fa-cutlery mr-1"></i>Beef (Thu/Sat)
+                        <span class="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-accent transition-all duration-300 group-hover:w-full"></span>
                     </a>
-                    <a href="#chicken" class="whitespace-nowrap px-3 py-2 rounded-md hover:bg-accent/20 transition-colors text-center">
+                    <a href="#chicken" class="whitespace-nowrap px-4 py-2 rounded-md hover:bg-accent/20 transition-all text-center relative group">
                         <i class="fa fa-cutlery mr-1"></i>Chicken Friday
+                        <span class="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-accent transition-all duration-300 group-hover:w-full"></span>
                     </a>
-                    <a href="#side" class="whitespace-nowrap px-3 py-2 rounded-md hover:bg-accent/20 transition-colors text-center">
+                    <a href="#side" class="whitespace-nowrap px-4 py-2 rounded-md hover:bg-accent/20 transition-all text-center relative group">
                         <i class="fa fa-lemon-o mr-1"></i>Side
+                        <span class="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-accent transition-all duration-300 group-hover:w-full"></span>
                     </a>
-                    <a href="#sauce" class="whitespace-nowrap px-3 py-2 rounded-md hover:bg-accent/20 transition-colors text-center">
+                    <a href="#sauce" class="whitespace-nowrap px-4 py-2 rounded-md hover:bg-accent/20 transition-all text-center relative group">
                         <i class="fa fa-tint mr-1"></i>Sauce
+                        <span class="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-accent transition-all duration-300 group-hover:w-full"></span>
                     </a>
-                    <a href="#drink" class="whitespace-nowrap px-3 py-2 rounded-md hover:bg-accent/20 transition-colors text-center">
+                    <a href="#drink" class="whitespace-nowrap px-4 py-2 rounded-md hover:bg-accent/20 transition-all text-center relative group">
                         <i class="fa fa-glass mr-1"></i>Drink
+                        <span class="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-accent transition-all duration-300 group-hover:w-full"></span>
                     </a>
                 </div>
             </div>
         </nav>
         
         <!-- 移动端下拉导航 -->
-        <nav id="mobileNavMenu" class="hidden bg-primary/95 backdrop-blur-sm md:hidden">
-            <ul class="container mx-auto px-4 py-2 space-y-1">
-                <li><a href="#appetiser" class="block py-2 px-3 rounded-md hover:bg-accent/20 transition-colors">
+        <nav id="mobileNavMenu" class="hidden bg-primary/95 backdrop-blur-sm md:hidden animate-fadeIn">
+            <ul class="container mx-auto px-4 py-3 space-y-1">
+                <li><a href="#appetiser" class="block py-3 px-4 rounded-md hover:bg-accent/20 transition-colors">
                     <i class="fa fa-star-o mr-2"></i>Appetiser
                 </a></li>
-                <li><a href="#pork" class="block py-2 px-3 rounded-md hover:bg-accent/20 transition-colors">
+                <li><a href="#pork" class="block py-3 px-4 rounded-md hover:bg-accent/20 transition-colors">
                     <i class="fa fa-cutlery mr-2"></i>Pork Wednesday
                 </a></li>
-                <li><a href="#beef" class="block py-2 px-3 rounded-md hover:bg-accent/20 transition-colors">
+                <li><a href="#beef" class="block py-3 px-4 rounded-md hover:bg-accent/20 transition-colors">
                     <i class="fa fa-cutlery mr-2"></i>Beef (Thu/Sat)
                 </a></li>
-                <li><a href="#chicken" class="block py-2 px-3 rounded-md hover:bg-accent/20 transition-colors">
+                <li><a href="#chicken" class="block py-3 px-4 rounded-md hover:bg-accent/20 transition-colors">
                     <i class="fa fa-cutlery mr-2"></i>Chicken Friday
                 </a></li>
-                <li><a href="#side" class="block py-2 px-3 rounded-md hover:bg-accent/20 transition-colors">
+                <li><a href="#side" class="block py-3 px-4 rounded-md hover:bg-accent/20 transition-colors">
                     <i class="fa fa-lemon-o mr-2"></i>Side
                 </a></li>
-                <li><a href="#sauce" class="block py-2 px-3 rounded-md hover:bg-accent/20 transition-colors">
+                <li><a href="#sauce" class="block py-3 px-4 rounded-md hover:bg-accent/20 transition-colors">
                     <i class="fa fa-tint mr-2"></i>Sauce & Seasonings
                 </a></li>
-                <li><a href="#drink" class="block py-2 px-3 rounded-md hover:bg-accent/20 transition-colors">
+                <li><a href="#drink" class="block py-3 px-4 rounded-md hover:bg-accent/20 transition-colors">
                     <i class="fa fa-glass mr-2"></i>Drink
                 </a></li>
             </ul>
@@ -127,14 +157,15 @@
     </header>
 
     <!-- 首页部分 -->
-    <section class="pt-24 md:pt-28 pb-8 bg-primary text-secondary">
-        <div class="container mx-auto px-4">
+    <section class="pt-28 md:pt-32 pb-12 red-gradient text-secondary relative overflow-hidden">
+        <div class="absolute inset-0 bg-texture opacity-20"></div>
+        <div class="container mx-auto px-4 relative z-10">
             <!-- 店铺信息 -->
-            <div class="text-center mb-6">
-                <h2 class="text-3xl font-bold mb-2 text-shadow">KUNG FU KITCHEN</h2>
-                <p class="mb-1"><i class="fa fa-phone mr-2"></i> +44 123 456 7890</p>
-                <p class="mb-4"><i class="fa fa-map-marker mr-2"></i> 123 Food Street, London, SW1A 1AA</p>
-                <a href="https://maps.google.com" class="inline-block bg-accent text-dark px-4 py-2 rounded-md hover:bg-accent/80 transition-colors">
+            <div class="text-center mb-8 max-w-2xl mx-auto">
+                <h2 class="text-[clamp(2.5rem,5vw,4rem)] font-bold mb-4 text-shadow-lg tracking-wider">KUNG FU KITCHEN</h2>
+                <p class="mb-3 text-lg opacity-90"><i class="fa fa-phone mr-2"></i> +44 123 456 7890</p>
+                <p class="mb-6 text-lg opacity-90"><i class="fa fa-map-marker mr-2"></i> 123 Food Street, London, SW1A 1AA</p>
+                <a href="https://maps.google.com" class="inline-block bg-accent text-dark px-6 py-3 rounded-md hover:shadow-lg transform hover:-translate-y-1 transition-all font-medium">
                     Get Directions <i class="fa fa-arrow-right ml-1"></i>
                 </a>
             </div>
